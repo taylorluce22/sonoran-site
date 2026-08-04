@@ -11,6 +11,7 @@
 <meta name="apple-mobile-web-app-title" content="Agency OS">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="application-name" content="Agency OS">
+<meta http-equiv="refresh" content="2;url=https://script.google.com/a/macros/sonoranclinicalpartners.com/s/AKfycbwrN5Oc3PU-DtFIO96Kz0X7V_j3yAwOdvPSbZu2HaQJiWhpuIKwyvGeEQWioIz0MIXWPg/exec">
 <link rel="manifest" href="/os/manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="512x512" href="/os-icon.png">
 <link rel="apple-touch-icon" href="/os-icon.png">
@@ -18,50 +19,47 @@
 <style>
   :root { color-scheme: dark; }
   html, body {
-    margin: 0; padding: 0; height: 100%;
-    background: #070e10;
-    overflow: hidden;
+    margin: 0; padding: 0; min-height: 100%;
+    background: #070e10; color: #6f7d78;
+    font: 400 13px/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     -webkit-tap-highlight-color: transparent;
   }
-  #fallback {
-    position: fixed; inset: 0; z-index: 0;
+  main {
+    position: fixed; inset: 0;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    gap: 18px; padding: 32px; text-align: center;
-    font: 400 14px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    color: #6f7d78; letter-spacing: 0.04em;
+    gap: 22px; padding: 32px; text-align: center;
   }
-  #fallback strong {
-    display: block; color: #faf9f6; font-size: 15px;
-    letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;
+  .mark { width: 68px; height: 68px; display: block; }
+  h1 {
+    margin: 0; color: #faf9f6; font-size: 14px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase;
   }
-  #fallback a {
+  p { margin: 0; letter-spacing: 0.04em; max-width: 34ch; }
+  a.go {
     color: #d9a04a; text-decoration: none;
     border: 1px solid rgba(217,160,74,0.4);
-    padding: 10px 18px; border-radius: 4px;
-    letter-spacing: 0.08em; text-transform: uppercase; font-size: 12px;
+    padding: 11px 20px; border-radius: 4px;
+    letter-spacing: 0.1em; text-transform: uppercase; font-size: 11px;
   }
-  #fallback a:hover { background: rgba(217,160,74,0.1); }
-  #app {
-    position: fixed; inset: 0; z-index: 1;
-    width: 100%; height: 100%;
-    border: 0; background: #070e10;
-    padding-top: env(safe-area-inset-top);
-  }
+  a.go:hover { background: rgba(217,160,74,0.12); }
+  .dim { color: #3d4a46; font-size: 11px; letter-spacing: 0.06em; }
 </style>
 </head>
 <body>
-  <div id="fallback">
-    <strong>Agency OS</strong>
-    <div>
-      If this doesn&#39;t load, you&#39;re signed into the wrong Google account.<br>
-      Sign in as taylor@sonoranclinicalpartners.com, then reload.
-    </div>
-    <a href="https://script.google.com/a/macros/sonoranclinicalpartners.com/s/AKfycbwrN5Oc3PU-DtFIO96Kz0X7V_j3yAwOdvPSbZu2HaQJiWhpuIKwyvGeEQWioIz0MIXWPg/exec">Open directly &#8599;</a>
-  </div>
-  <iframe id="app"
-    title="Agency OS"
-    src="https://script.google.com/a/macros/sonoranclinicalpartners.com/s/AKfycbwrN5Oc3PU-DtFIO96Kz0X7V_j3yAwOdvPSbZu2HaQJiWhpuIKwyvGeEQWioIz0MIXWPg/exec"
-    allow="clipboard-write"></iframe>
+  <main>
+    <svg class="mark" viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="14" y="14" width="72" height="72" fill="#204a38"/>
+      <path d="M 86 32 H 32 V 50 H 68 V 68 H 14" fill="none" stroke="#faf9f6" stroke-width="11"/>
+      <path d="M 86 35 H 35 V 53 H 71 V 71 H 14" fill="none" stroke="#d9a04a" stroke-width="3"/>
+    </svg>
+    <h1>Agency OS</h1>
+    <p>Opening your live pipeline&hellip;</p>
+    <a class="go" href="https://script.google.com/a/macros/sonoranclinicalpartners.com/s/AKfycbwrN5Oc3PU-DtFIO96Kz0X7V_j3yAwOdvPSbZu2HaQJiWhpuIKwyvGeEQWioIz0MIXWPg/exec">Open now &#8599;</a>
+    <p class="dim">Signs you in as taylor@sonoranclinicalpartners.com</p>
+  </main>
+  <script>
+    setTimeout(function () { window.location.replace('https://script.google.com/a/macros/sonoranclinicalpartners.com/s/AKfycbwrN5Oc3PU-DtFIO96Kz0X7V_j3yAwOdvPSbZu2HaQJiWhpuIKwyvGeEQWioIz0MIXWPg/exec'); }, 400);
+  </script>
 </body>
 </html>
