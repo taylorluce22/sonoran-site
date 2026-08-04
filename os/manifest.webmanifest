@@ -1,0 +1,25 @@
+{
+  "name": "Agency OS — Sonoran Clinical Partners",
+  "short_name": "Agency OS",
+  "description": "Live pipeline, conversations, and outreach metrics for Sonoran Clinical Partners, read straight from Gmail.",
+  "start_url": "/os/",
+  "scope": "/os/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#070e10",
+  "theme_color": "#070e10",
+  "icons": [
+    {
+      "src": "/os-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/os-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
