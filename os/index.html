@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agency OS — Sonoran Clinical Partners</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#070e10">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Agency OS">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="Agency OS">
+<link rel="manifest" href="/os/manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="512x512" href="/os-icon.png">
+<link rel="apple-touch-icon" href="/os-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/os-icon.png">
+<style>
+  :root { color-scheme: dark; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: #070e10;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #fallback {
+    position: fixed; inset: 0; z-index: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 18px; padding: 32px; text-align: center;
+    font: 400 14px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color: #6f7d78; letter-spacing: 0.04em;
+  }
+  #fallback strong {
+    display: block; color: #faf9f6; font-size: 15px;
+    letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;
+  }
+  #fallback a {
+    color: #d9a04a; text-decoration: none;
+    border: 1px solid rgba(217,160,74,0.4);
+    padding: 10px 18px; border-radius: 4px;
+    letter-spacing: 0.08em; text-transform: uppercase; font-size: 12px;
+  }
+  #fallback a:hover { background: rgba(217,160,74,0.1); }
+  #app {
+    position: fixed; inset: 0; z-index: 1;
+    width: 100%; height: 100%;
+    border: 0; background: #070e10;
+    padding-top: env(safe-area-inset-top);
+  }
+</style>
+</head>
+<body>
+  <div id="fallback">
+    <strong>Agency OS</strong>
+    <div>
+      If this doesn&#39;t load, you&#39;re signed into the wrong Google account.<br>
+      Sign in as taylor@sonoranclinicalpartners.com, then reload.
+    </div>
+    <a href="https://script.google.com/a/macros/sonoranclinicalpartners.com/s/AKfycbwrN5Oc3PU-DtFIO96Kz0X7V_j3yAwOdvPSbZu2HaQJiWhpuIKwyvGeEQWioIz0MIXWPg/exec">Open directly &#8599;</a>
+  </div>
+  <iframe id="app"
+    title="Agency OS"
+    src="https://script.google.com/a/macros/sonoranclinicalpartners.com/s/AKfycbwrN5Oc3PU-DtFIO96Kz0X7V_j3yAwOdvPSbZu2HaQJiWhpuIKwyvGeEQWioIz0MIXWPg/exec"
+    allow="clipboard-write"></iframe>
+</body>
+</html>
