@@ -6,6 +6,16 @@
 --a3mono:ui-monospace,'SF Mono',Menlo,monospace}
 @keyframes a3rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @keyframes a3pulse{0%{box-shadow:0 0 0 0 rgba(65,217,138,.45)}70%{box-shadow:0 0 0 8px rgba(65,217,138,0)}100%{box-shadow:0 0 0 0 rgba(65,217,138,0)}}
+@keyframes a3aur1{0%{transform:translate(-12%,-6%) scale(1)}50%{transform:translate(10%,8%) scale(1.18)}100%{transform:translate(-12%,-6%) scale(1)}}
+@keyframes a3aur2{0%{transform:translate(8%,10%) scale(1.1)}50%{transform:translate(-10%,-8%) scale(.94)}100%{transform:translate(8%,10%) scale(1.1)}}
+@keyframes a3shimmer{to{background-position:-200% center}}
+.a3shim{background:linear-gradient(90deg,#f2eee4,#e8b366 45%,#7fb094 70%,#f2eee4);background-size:200% auto;
+-webkit-background-clip:text;background-clip:text;color:transparent;animation:a3shimmer 5s linear infinite}
+#a3fx{position:fixed;inset:0;z-index:0;pointer-events:none}
+.a3aur{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
+#a3aurA{width:52vw;height:52vw;left:-8vw;top:-14vh;background:radial-gradient(circle,rgba(217,160,74,.16),transparent 65%);animation:a3aur1 26s ease-in-out infinite}
+#a3aurB{width:46vw;height:46vw;right:-10vw;bottom:-16vh;background:radial-gradient(circle,rgba(32,74,56,.5),transparent 65%);animation:a3aur2 32s ease-in-out infinite}
+#aos3-ov .wrap{position:relative;z-index:2}
 .a3glass{background:linear-gradient(165deg,var(--a3glass2),var(--a3glass));border:1px solid var(--a3brd);
 backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .a3kick{font-family:var(--a3mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--a3kick);
@@ -180,8 +190,8 @@ border-radius:12px;padding:10px 12px;backdrop-filter:blur(8px);display:grid;grid
 .a3lg{display:flex;align-items:center;gap:7px;font-size:10.5px;cursor:pointer}
 .a3lg.offg{opacity:.32}
 .a3lg i{width:9px;height:9px;border-radius:50%;flex:none}
-#a3vdetail{position:absolute;right:14px;top:14px;width:262px;max-width:calc(100% - 28px);background:rgba(7,14,16,.93);
-border:1px solid rgba(242,238,228,.14);border-radius:14px;padding:16px;backdrop-filter:blur(10px)}
+#a3vdetail{position:absolute;right:14px;top:14px;width:282px;max-width:calc(100% - 28px);max-height:calc(100% - 28px);
+overflow-y:auto;background:rgba(7,14,16,.93);border:1px solid rgba(242,238,228,.14);border-radius:14px;padding:16px;backdrop-filter:blur(10px)}
 #a3vdetail .hint{font-size:12px;color:var(--a3sec);line-height:1.55}
 .a3dn{font-size:16px;font-weight:750;display:flex;align-items:center;gap:9px}
 .a3dn i{width:11px;height:11px;border-radius:50%;flex:none}
@@ -213,7 +223,7 @@ font-family:'Instrument Sans',system-ui,sans-serif}
   <button id="a3b-net" onclick="aos3Open('net')"><span class="glyph">◆</span>Network</button>
   <button id="a3b-vault" onclick="aos3Open('vault')"><span class="glyph">◉</span>Vault</button>
 </div>
-<div id="aos3-ov"><div class="wrap">
+<div id="aos3-ov"><canvas id="a3fx"></canvas><div class="a3aur" id="a3aurA"></div><div class="a3aur" id="a3aurB"></div><div class="wrap">
   <div class="tophead">
     <div class="ttl" id="a3title">Command<small>Sonoran Clinical Partners · live</small></div>
     <div style="display:flex;gap:9px;align-items:center">
@@ -266,17 +276,60 @@ window.aos3Open=function(s){
     document.getElementById('a3b-'+(k==='vault'?'vault':k)).classList.toggle('on',k===s);
   });
   document.getElementById('a3title').innerHTML=
-    s==='cmd'?'Command Center<small>approve · act · move it forward</small>':
-    s==='net'?'Agent Network<small>one chief of staff · the crew reports here</small>':
-    'Obsidian Vault<small>mirrors agency-os/brain · sessions push, obsidian pulls</small>';
+    s==='cmd'?'<span class="a3shim">Command Center</span><small>approve · act · move it forward</small>':
+    s==='net'?'<span class="a3shim">Agent Network</span><small>one chief of staff · the crew reports here</small>':
+    '<span class="a3shim">Knowledge Vault</span><small>the agency brain · sessions push, obsidian pulls</small>';
   if(s==='vault')vaultBoot();
+  fxStart();
   document.body.style.overflow='hidden';
 };
 window.aos3Close=function(){
   document.getElementById('aos3-ov').classList.remove('open');
   ['cmd','net','vault'].forEach(function(k){document.getElementById('a3b-'+(k==='vault'?'vault':k)).classList.remove('on')});
+  fxStop();
   document.body.style.overflow='';
 };
+
+/* ── particle field (FarmHand BackgroundFx, canvas translation) ── */
+var FX={run:false,pts:null,mx:0,my:0};
+function fxStart(){
+  var cv=document.getElementById('a3fx');if(!cv)return;
+  var ctx=cv.getContext('2d');
+  if(!FX.pts){
+    FX.pts=[];
+    var L=[[110,'217,160,74',1.4,.012],[90,'127,176,148',1.15,.02],[46,'242,238,228',.8,.032]];
+    L.forEach(function(layer,li){
+      for(var i=0;i<layer[0];i++){
+        FX.pts.push({a:Math.random()*Math.PI*2,rad:.12+Math.random()*.85,z:Math.random(),
+          col:layer[1],sz:layer[2],sp:layer[3]*(0.6+Math.random()*.8),li:li});
+      }
+    });
+    window.addEventListener('mousemove',function(e){
+      FX.mx=(e.clientX/window.innerWidth-.5)*2;FX.my=(e.clientY/window.innerHeight-.5)*2});
+  }
+  FX.run=true;
+  (function loop(){
+    if(!FX.run)return;
+    var W=window.innerWidth,H=window.innerHeight;
+    if(cv.width!==W){cv.width=W;cv.height=H}
+    ctx.clearRect(0,0,W,H);
+    var t=performance.now()/1000;
+    ctx.globalCompositeOperation='lighter';
+    FX.pts.forEach(function(p){
+      var ang=p.a+t*p.sp*3;
+      var px=W/2+Math.cos(ang)*p.rad*W*.62+FX.mx*(18+p.z*26);
+      var py=H/2+Math.sin(ang*.9)*p.rad*H*.5+Math.sin(t*.25+p.a*3)*9-FX.my*(12+p.z*20);
+      var tw=.28+.5*Math.abs(Math.sin(t*.7+p.a*7));
+      ctx.globalAlpha=tw*(p.li===2?.8:.5);
+      ctx.beginPath();ctx.arc(px,py,p.sz*(0.7+p.z*.8),0,6.2832);
+      ctx.fillStyle='rgba('+p.col+',1)';ctx.fill();
+    });
+    ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+    requestAnimationFrame(loop);
+  })();
+}
+function fxStop(){FX.run=false;var cv=document.getElementById('a3fx');
+  if(cv){var c=cv.getContext('2d');c.clearRect(0,0,cv.width,cv.height)}}
 document.addEventListener('keydown',function(e){if(e.key==='Escape')aos3Close()});
 window.aos3Refresh=function(){
   var r=gsr(),b=document.getElementById('a3rf');
@@ -469,6 +522,33 @@ var LINKS=[['SCP Brain','Agency OS'],['SCP Brain','Orchestrator'],['SCP Brain','
 ['Supplier Board','TRT Niche'],['Buyer Pipeline 25k','TRT Niche'],['TRT Niche','TRT Niche Brief'],
 ['Counsel Questions','Legal Deep Dive'],['Terms & Bright Lines','Legal Deep Dive'],['State Risk Map','Legal Deep Dive'],
 ['Cal.com booking','Calendar'],['Cal.com booking','Supplier Board']];
+var NOTES={
+'SCP Brain':'The agency’s knowledge vault. Sessions push, Obsidian pulls, and this screen mirrors it node-for-node. Lives at coyote-and-company/agency-os/brain.',
+'Agency OS':'The live cockpit at sonoranclinicalpartners.com/os — reads Gmail on every load. Approve desk, next actions, agent network, this vault.',
+'Morning Brief':'Weekdays 7 AM MST. Overnight digest to the inbox: what changed, what needs Taylor, approve-desk count.',
+'Weekly Brief':'Mondays 7:25 AM MST. The week, prioritized.',
+'Approve Desk':'Every outbound draft the crew preps waits here. Nothing sends without Taylor pressing Approve & send.',
+'Next Actions':'The queue that moves the business forward. Fed by ACTION: lines in agent reports plus manual adds.',
+'Orchestrator':'CEO agent. Weekdays 4:15 PM MST — reviews the whole business, sets tomorrow, checks the rest of the crew ran.',
+'Inbox Operator':'Comms desk. Weekdays 10a/1p/4p MST — triages replies, preps drafts in Taylor’s voice. Drafts only, never sends.',
+'Compliance Watch':'Risk intel. Wednesdays 7 AM MST — FDA, six broker-risk states, AKS/EKRA enforcement. RED/AMBER/NOTE with sources.',
+'Books':'Signal layer. Fridays 7 AM MST — deposits in, expenses out, statement math vs the 3%. Never builds an order ledger (bright line).',
+'ProRx — 3% agreed':'Dave Dugas, VP, Exton PA. Verbal: 3% of gross volume on introduced accounts, no introduction fee. Nothing papered before counsel. Dave abroad wk of Aug 10.',
+'Globyz call':'Salman Pathan, CEO (parent of Nexgen Formulations). Mon Aug 10, 10:25 AM MST, Teams.',
+'Assure call':'Andrea Caudill, Director of BD, Bartow FL (sterile IV fluids). Wed Aug 12, 10:00 AM MST, Meet.',
+'Frier Levitt':'Healthcare regulatory counsel — Arielle Miliambro. Scoping call pending (Tue–Thu offered). Fee structure gets pressure-tested here first.',
+'Staska':'Nick Shada. Three Central-time slots offered; awaiting reply.',
+'Supplier Board':'Every 503B facility contacted, replied, bounced or benched. 67 contacted to date.',
+'Buyer Pipeline 25k':'25,109 orgs across 46 states + DC; launch slice 2,908 in AZ/TX/CO/NV; 697 men’s-health/urology rows.',
+'TRT Niche':'The specialization: men’s health / TRT clinics ↔ testosterone-capable 503Bs (~9 of 95 facilities).',
+'Legal Deep Dive':'The regulatory map: 503A/B split, essentially-a-copy rule, wholesaling prohibition, AKS safe harbors, state broker laws.',
+'TRT Niche Brief':'Tier A/B testosterone-capable facilities, the 118-of-25,109 buyer gap, DEA verification scope.',
+'Counsel Questions':'Nine prioritized questions for Frier Levitt — rep offer, 100% volume-based comp, GPO restructure, split terms.',
+'Terms & Bright Lines':'$500 intro fee on signing + 3% marketing services fee (standard ask). Never seller, never title, never quote, never accept POs. Banned words: commission, broker, brokerage.',
+'State Risk Map':'Real risk states: OH, OR, TX, LA, OK, TN. AZ licenses virtual wholesalers (no DR experience requirement). FL correction: broker permit requires taking title.',
+'Gmail':'taylor@sonoranclinicalpartners.com — the source of truth. Agents read it; reports land in it with the AOS • prefix.',
+'Calendar':'Google Calendar — supplier and counsel calls. The OS shows the next 8 days.',
+'Cal.com booking':'cal.com/sonoranclinical/intro-call — inbound bookings only; every call starts here.'};
 var V={boot:false,off:{}};
 function vaultBoot(){
   if(V.boot)return;V.boot=true;
@@ -512,8 +592,13 @@ function vaultBoot(){
       n.vx*=0.86;n.vy*=0.86;n.x+=n.vx;n.y+=n.vy})}
   for(var w=0;w<420;w++)step(1);
   function vis(n){return !V.off[n.g]}
+  var stars=[];for(var si=0;si<110;si++)stars.push({x:(Math.sin(si*127.3)*0.5)*1400,y:(Math.sin(si*311.7)*0.5)*900,r:.5+Math.abs(Math.sin(si*7.1))*1.1,p:si*0.7});
   function draw(){
     ctx.clearRect(0,0,W,H);ctx.save();ctx.translate(W/2+view.x,H/2+view.y);ctx.scale(view.k,view.k);
+    var tnow=performance.now()/1000;
+    stars.forEach(function(s){ctx.globalAlpha=.06+.08*Math.abs(Math.sin(tnow*.6+s.p));
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.2832);ctx.fillStyle='#e8d9b8';ctx.fill()});
+    ctx.globalAlpha=1;
     var focus=hoverI,nbSet=focus>=0?M.nb[focus]:null;
     M.links.forEach(function(l){var a=M.nodes[l.s],b=M.nodes[l.t];if(!vis(a)||!vis(b))return;
       var on=focus<0||l.s===focus||l.t===focus;
@@ -521,8 +606,9 @@ function vaultBoot(){
       ctx.strokeStyle=on?'rgba(217,160,74,0.45)':'rgba(190,180,160,0.06)';ctx.lineWidth=on?1.3:0.6;ctx.stroke()});
     M.nodes.forEach(function(n,i){if(!vis(n))return;var col=GROUPS[n.g].color;
       var dim=focus>=0&&i!==focus&&!(nbSet&&nbSet[i]);
-      ctx.globalAlpha=dim?0.2:1;ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,6.2832);
-      ctx.fillStyle=col;ctx.shadowColor=col;ctx.shadowBlur=i===focus?22:dim?0:9;ctx.fill();ctx.shadowBlur=0;
+      var rr=n.r*(1+0.05*Math.sin(tnow*1.6+i*1.3));
+      ctx.globalAlpha=dim?0.2:1;ctx.beginPath();ctx.arc(n.x,n.y,rr,0,6.2832);
+      ctx.fillStyle=col;ctx.shadowColor=col;ctx.shadowBlur=i===focus?26:dim?0:12;ctx.fill();ctx.shadowBlur=0;
       if(i===focus){ctx.lineWidth=2;ctx.strokeStyle='#fff';ctx.stroke()}
       var lab=!dim&&(n.deg>=6||i===focus||(nbSet&&nbSet[i])||view.k>1.2);
       if(lab){ctx.globalAlpha=1;ctx.font=(i===focus?'600 ':'')+'10.5px system-ui,sans-serif';ctx.textAlign='center';
@@ -538,9 +624,11 @@ function vaultBoot(){
       var g=GROUPS[(NODES.filter(function(q){return q[0]===x})[0]||[null,'system'])[1]];
       return '<div class="a3di" data-id="'+E(x)+'"><i style="background:'+g.color+'"></i>'+E(x)+'</div>'}).join('')
       :'<div style="font-size:11px;color:var(--a3muted)">none</div>')}
+    var body=NOTES[n.id]||'';
     return '<div class="a3dn"><i style="background:'+GROUPS[n.g].color+';box-shadow:0 0 9px '+GROUPS[n.g].color+'"></i>'+E(n.id)+'</div>'+
-      '<div class="a3dg">'+GROUPS[n.g].label+' · '+n.deg+' connections</div>'+
+      '<div class="a3dg">'+GROUPS[n.g].label+' · '+n.deg+' connections · <span style="color:'+GROUPS[n.g].color+'">brain/'+E(n.id)+'.md</span></div>'+
       '<div class="a3dtags">'+TAGS[n.g].map(function(t){return '<span class="a3dtag">'+t+'</span>'}).join('')+'</div>'+
+      (body?'<div style="font-size:12px;color:var(--a3ink2);line-height:1.6;border-left:2px solid '+GROUPS[n.g].color+'55;padding:2px 0 2px 10px;margin-bottom:4px">'+E(body)+'</div>':'')+
       list('Links to ('+M.adj[n.id].out.length+')',M.adj[n.id].out.slice().sort())+
       list('Linked from ('+M.adj[n.id].inn.length+')',M.adj[n.id].inn.slice().sort())}
   var det=document.getElementById('a3vdetail');
