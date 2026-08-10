@@ -1,0 +1,581 @@
+<!-- AOS3 mission layer — FarmHand agentic-OS screens translated to SCP --><style>
+:root{--a3bg:#070e10;--a3bg3:#04090b;--a3ink:#f2eee4;--a3ink2:#ded9cb;--a3sec:#a8a498;--a3muted:#6e6b60;--a3kick:#b8a380;
+--a3purple:#d9a04a;--a3purplelt:#e8b366;--a3cyan:#7cc4e8;--a3cyanlt:#9cd4ee;--a3green:#41d98a;--a3greenlt:#7fb094;
+--a3amber:#ffc23d;--a3orange:#ff9a62;--a3teal:#4ec9b0;--a3rose:#e87c9a;
+--a3glass:rgba(242,238,228,.04);--a3glass2:rgba(242,238,228,.06);--a3brd:rgba(242,238,228,.1);--a3brd2:rgba(242,238,228,.16);
+--a3mono:ui-monospace,'SF Mono',Menlo,monospace}
+@keyframes a3rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes a3pulse{0%{box-shadow:0 0 0 0 rgba(65,217,138,.45)}70%{box-shadow:0 0 0 8px rgba(65,217,138,0)}100%{box-shadow:0 0 0 0 rgba(65,217,138,0)}}
+.a3glass{background:linear-gradient(165deg,var(--a3glass2),var(--a3glass));border:1px solid var(--a3brd);
+backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.a3kick{font-family:var(--a3mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--a3kick);
+text-shadow:0 0 10px rgba(217,160,74,.35)}
+
+/* ── HUD ── */
+#aos3-hud{position:fixed;top:0;left:0;right:0;height:38px;z-index:999985;display:flex;align-items:center;gap:14px;
+padding:0 16px;background:rgba(6,6,13,.78);border-bottom:1px solid var(--a3brd);backdrop-filter:blur(14px);
+font-family:var(--a3mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--a3sec)}
+#aos3-hud svg{width:16px;height:16px;min-width:16px}
+#aos3-hud .hb{color:var(--a3ink);font-weight:700}
+#aos3-hud .sep{width:1px;height:14px;background:var(--a3brd)}
+#aos3-hud .spacer{flex:1}
+#aos3-hud .lv{display:flex;align-items:center;gap:6px;color:var(--a3greenlt)}
+#aos3-hud .lv i{width:6px;height:6px;border-radius:50%;background:var(--a3green);display:inline-block;animation:a3pulse 2.2s infinite}
+#aos3-hud .clk{color:var(--a3ink);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.08em}
+@media(max-width:700px){#aos3-hud .hidesm{display:none}}
+
+/* ── Dock ── */
+#aos3-dock{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:999990;display:flex;gap:6px;align-items:center;
+background:linear-gradient(165deg,rgba(242,238,228,.08),rgba(7,14,16,.92));border:1px solid var(--a3brd2);
+border-radius:15px;padding:7px 9px;font-family:var(--a3mono);backdrop-filter:blur(14px);
+box-shadow:0 12px 40px rgba(0,0,0,.6),0 0 24px rgba(217,160,74,.16),inset 0 1px 0 rgba(242,238,228,.08)}
+#aos3-dock .mono{font-size:9px;letter-spacing:.14em;color:var(--a3muted);padding:0 7px 0 4px;font-weight:700}
+#aos3-dock button{background:none;border:none;color:var(--a3sec);cursor:pointer;font-family:inherit;
+font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:9px 14px;border-radius:9px;
+display:flex;align-items:center;gap:8px;position:relative}
+#aos3-dock button:hover{color:var(--a3ink);background:rgba(255,255,255,.07)}
+#aos3-dock button.on{background:linear-gradient(150deg,#e8b366,#d9a04a);color:#12100a}
+#aos3-dock .glyph{font-size:13px}
+#aos3-dock .badge{background:var(--a3rose);color:#fff;font-size:9px;border-radius:10px;padding:1px 6px;font-weight:700}
+#aos3-dock button.on .badge{background:#0b0b16;color:var(--a3cyanlt)}
+
+/* ── Overlay ── */
+#aos3-ov{position:fixed;inset:0;z-index:999980;display:none;overflow-y:auto;
+background:radial-gradient(90% 70% at 70% -10%,rgba(32,74,56,.4),transparent 55%),
+radial-gradient(70% 60% at 0% 100%,rgba(217,160,74,.08),transparent 55%),rgba(4,9,11,.985);
+font-family:'Instrument Sans',system-ui,sans-serif;color:var(--a3ink);-webkit-font-smoothing:antialiased;line-height:1.5}
+#aos3-ov.open{display:block}
+#aos3-ov .wrap{max-width:1240px;margin:0 auto;padding:26px 20px 110px;animation:a3rise .35s cubic-bezier(.22,1,.36,1) both}
+#aos3-ov .tophead{display:flex;justify-content:space-between;align-items:center;gap:14px;
+border-bottom:1px solid var(--a3brd);padding-bottom:13px;margin-bottom:18px;flex-wrap:wrap}
+#aos3-ov .ttl{font-size:15px;font-weight:700;letter-spacing:-.01em}
+#aos3-ov .ttl small{display:block;font-family:var(--a3mono);font-size:9px;color:var(--a3muted);letter-spacing:.14em;text-transform:uppercase;margin-top:3px}
+.a3btn{border-radius:9px;cursor:pointer;font-family:var(--a3mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+font-weight:700;padding:9px 15px;border:1px solid var(--a3brd);background:var(--a3glass);color:var(--a3ink)}
+.a3btn:hover{border-color:var(--a3cyan)}
+.a3btn.primary{background:linear-gradient(150deg,#e8b366,#d9a04a);border-color:transparent;color:#12100a}
+.a3btn.danger{border-color:rgba(196,112,74,.6);color:#c4704a}
+.a3btn:disabled{opacity:.45;pointer-events:none}
+.a3h2{font-family:var(--a3mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--a3kick);font-weight:700;
+margin:0 0 11px;display:flex;align-items:center;gap:10px}
+.a3h2::after{content:"";flex:1;height:1px;background:var(--a3brd)}
+.a3h2 .cnt{color:var(--a3muted);letter-spacing:.05em}
+.a3pill{margin-left:auto;font-family:var(--a3mono);font-size:11px;border-radius:999px;padding:5px 12px;white-space:nowrap}
+
+/* command stats */
+.a3stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:16px}
+.a3stat{border-radius:15px;padding:16px 18px}
+.a3stat .l{font-family:var(--a3mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--a3kick)}
+.a3stat .v{font-size:24px;font-weight:750;margin:6px 0 2px}
+.a3stat .n{font-size:11.5px;color:var(--a3muted);line-height:1.5}
+
+/* command grid */
+.a3grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+@media(max-width:980px){.a3grid{grid-template-columns:1fr}}
+.a3stack{display:flex;flex-direction:column;gap:16px;min-width:0}
+.a3panel{border-radius:16px;padding:17px 19px}
+
+/* approve desk */
+.a3dcard{border:1px solid rgba(56,189,248,.28);border-radius:13px;padding:13px 15px;margin-bottom:10px;background:rgba(11,11,22,.5)}
+.a3dcard:last-child{margin-bottom:0}
+.a3dhead{display:flex;justify-content:space-between;gap:10px;align-items:baseline;cursor:pointer;flex-wrap:wrap}
+.a3dto{font-weight:700;font-size:13.5px}
+.a3dsub{font-size:12px;color:var(--a3sec);margin-top:2px}
+.a3dago{font-family:var(--a3mono);font-size:9.5px;color:var(--a3muted);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.a3dbody{display:none;margin-top:11px;padding-top:11px;border-top:1px solid var(--a3brd)}
+.a3dcard.open .a3dbody{display:block}
+.a3dpre{white-space:pre-wrap;font-family:var(--a3mono);font-size:12px;color:var(--a3ink2);line-height:1.62;max-height:260px;overflow:auto;
+background:rgba(6,6,13,.7);border:1px solid var(--a3brd);border-radius:9px;padding:11px 13px}
+.a3dedit{display:none}
+.a3dcard.editing .a3dpre{display:none}
+.a3dcard.editing .a3dedit{display:block}
+.a3dedit input,.a3dedit textarea{width:100%;background:rgba(6,6,13,.7);border:1px solid var(--a3brd);border-radius:9px;color:var(--a3ink);
+font-family:var(--a3mono);font-size:12px;padding:9px 11px;margin-bottom:8px;line-height:1.6;box-sizing:border-box}
+.a3dedit textarea{min-height:200px;resize:vertical}
+.a3dbtns{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+.a3note{font-size:10.5px;color:var(--a3muted);margin-top:8px;line-height:1.6}
+
+/* actions */
+.a3addrow{display:flex;gap:8px;margin-bottom:12px}
+.a3addrow input{flex:1;background:rgba(6,6,13,.7);border:1px solid var(--a3brd);border-radius:9px;color:var(--a3ink);
+font-family:inherit;font-size:12.8px;padding:10px 12px}
+.a3act{display:flex;align-items:flex-start;gap:11px;padding:9px 2px;border-bottom:1px solid rgba(255,255,255,.06)}
+.a3act:last-child{border-bottom:none}
+.a3cb{width:17px;height:17px;min-width:17px;border:1.5px solid var(--a3muted);border-radius:5px;cursor:pointer;margin-top:2px;
+display:flex;align-items:center;justify-content:center;font-size:11px;color:#0b0b16}
+.a3act.done .a3cb{background:var(--a3green);border-color:var(--a3green)}
+.a3atext{flex:1;font-size:13px;line-height:1.55}
+.a3act.done .a3atext{color:var(--a3muted);text-decoration:line-through}
+.a3atag{font-family:var(--a3mono);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:2px 7px;
+border-radius:12px;background:rgba(123,228,149,.13);color:var(--a3greenlt);white-space:nowrap;margin-top:3px}
+.a3atag.you{background:rgba(255,194,61,.13);color:var(--a3amber)}
+.a3atag.mb{background:rgba(255,255,255,.07);color:var(--a3sec)}
+.a3ax{color:var(--a3muted);cursor:pointer;font-size:14px;padding:0 4px}
+.a3ax:hover{color:var(--a3rose)}
+.a3ev{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:12.4px}
+.a3ev:last-child{border-bottom:none}
+.a3evd{font-family:var(--a3mono);color:var(--a3cyanlt);font-weight:700;white-space:nowrap;min-width:86px;font-size:11px}
+.a3pl{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:12.4px}
+.a3pl:last-child{border-bottom:none}
+.a3pl .k{color:var(--a3sec)}.a3pl .v{font-weight:700}.a3pl .v.am{color:var(--a3amber)}
+.a3empty{color:var(--a3muted);font-size:12.6px;padding:6px 0}
+
+/* ── Agent Network (FarmHand translation) ── */
+.a3ceo{border-radius:20px;padding:24px 26px;margin-bottom:22px;display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap;
+background:radial-gradient(90% 130% at 8% 0%,rgba(217,160,74,.14),transparent 55%),radial-gradient(70% 120% at 95% 100%,rgba(32,74,56,.35),transparent 60%),rgba(242,238,228,.045);
+border:1px solid rgba(217,160,74,.35);backdrop-filter:blur(14px)}
+.a3ceoglyph{width:54px;height:54px;border-radius:14px;flex-shrink:0;display:grid;place-items:center;font-size:24px;color:#12100a;
+background:linear-gradient(150deg,#e8b366,#d9a04a);box-shadow:0 8px 24px rgba(217,160,74,.4)}
+.a3ceobody{flex:1 1 260px}
+.a3ceostatus{display:inline-block;font-family:var(--a3mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#0b0b16;
+padding:3px 9px;border-radius:999px;font-weight:700;margin-bottom:10px}
+.a3ceoname{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:0 0 3px}
+.a3ceorole{font-family:var(--a3mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#e8b366;margin-bottom:9px}
+.a3ceodesc{font-size:12.5px;color:var(--a3sec);line-height:1.55;max-width:48ch}
+.a3ceotag{font-size:11.5px;color:var(--a3muted);font-style:italic;margin-top:8px}
+.a3ceostats{display:grid;grid-template-columns:auto auto;gap:14px 30px}
+.a3ceostats .l{font-family:var(--a3mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--a3kick)}
+.a3ceostats .v{font-size:22px;font-weight:750;margin-top:2px}
+.a3ceostats .v.mono{font-family:var(--a3mono);font-size:13px;color:#e8b366}
+.a3netgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:14px;margin-bottom:22px}
+.a3spec{border-radius:16px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px;animation:a3rise .3s ease both}
+.a3spechead{display:flex;align-items:center;gap:11px}
+.a3glyphtile{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:18px;flex-shrink:0}
+.a3specname{margin:0;font-size:16px;color:var(--a3ink);letter-spacing:-.01em;font-weight:700}
+.a3specrole{font-family:var(--a3mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--a3kick);margin-top:2px}
+.a3statuspill{font-family:var(--a3mono);font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;flex-shrink:0;font-weight:700}
+.a3specdesc{font-size:12px;color:var(--a3sec);line-height:1.5}
+.a3chips{display:flex;flex-wrap:wrap;gap:6px}
+.a3chip{font-size:9.5px;font-family:var(--a3mono);letter-spacing:.02em;border-radius:7px;padding:3px 8px}
+.a3flow{display:flex;flex-direction:column;gap:6px;margin-top:2px}
+.a3step{display:flex;gap:9px;align-items:flex-start}
+.a3stepn{flex-shrink:0;width:18px;height:18px;border-radius:6px;display:grid;place-items:center;font-family:var(--a3mono);
+font-size:9.5px;font-weight:700;margin-top:1px}
+.a3steptext{font-size:11.5px;color:var(--a3ink2);line-height:1.4}
+.a3out{font-size:10.5px;border-radius:9px;padding:7px 10px;margin-top:2px;line-height:1.4}
+.a3tagline{font-size:11px;color:var(--a3muted);font-style:italic;margin-top:auto;padding-top:4px}
+.a3modelrow{display:flex;align-items:center;gap:6px;border-top:1px solid rgba(255,255,255,.06);padding-top:9px;margin-top:2px}
+.a3modelrow .l{font-family:var(--a3mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--a3kick)}
+.a3modelrow .v{margin-left:auto;font-family:var(--a3mono);font-size:11px;color:var(--a3ink2)}
+.a3lastrun{font-family:var(--a3mono);font-size:9px;color:var(--a3muted);letter-spacing:.05em}
+.a3headline{font-size:11px;line-height:1.5;border-left:2px solid rgba(232,179,102,.55);padding-left:9px;color:#e8b366}
+.a3mem{border-radius:18px;padding:20px 22px;background:radial-gradient(80% 130% at 92% 0%,rgba(65,217,138,.12),transparent 55%),rgba(255,255,255,.04);
+border:1px solid rgba(65,217,138,.28);backdrop-filter:blur(14px)}
+.a3memhead{display:flex;align-items:center;gap:10px;margin-bottom:5px;flex-wrap:wrap}
+.a3memdot{width:10px;height:10px;border-radius:3px;background:var(--a3green);box-shadow:0 0 10px var(--a3green)}
+.a3memtitle{margin:0;font-size:16px;color:var(--a3ink);font-weight:700}
+.a3membadge{font-family:var(--a3mono);font-size:10.5px;color:var(--a3greenlt);background:rgba(123,228,149,.12);
+border:1px solid rgba(123,228,149,.3);border-radius:999px;padding:3px 10px}
+.a3memdesc{font-size:12.5px;color:var(--a3sec);line-height:1.55;max-width:70ch;margin-bottom:14px}
+.a3memchips{display:flex;flex-wrap:wrap;gap:8px}
+.a3memchip{font-size:11.5px;color:var(--a3ink2);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+border-radius:9px;padding:8px 12px}
+
+/* ── Vault (FarmHand KnowledgeVault translation) ── */
+#a3vwrap{position:relative;height:calc(100vh - 220px);min-height:430px;border-radius:18px;overflow:hidden;
+border:1px solid rgba(242,238,228,.08);background:radial-gradient(70% 60% at 50% 40%,#0b1a16,#04090b)}
+#a3vc{display:block;width:100%;height:100%;cursor:grab}
+#a3vlegend{position:absolute;left:14px;bottom:14px;background:rgba(7,14,16,.85);border:1px solid rgba(242,238,228,.09);
+border-radius:12px;padding:10px 12px;backdrop-filter:blur(8px);display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+.a3lg{display:flex;align-items:center;gap:7px;font-size:10.5px;cursor:pointer}
+.a3lg.offg{opacity:.32}
+.a3lg i{width:9px;height:9px;border-radius:50%;flex:none}
+#a3vdetail{position:absolute;right:14px;top:14px;width:262px;max-width:calc(100% - 28px);background:rgba(7,14,16,.93);
+border:1px solid rgba(242,238,228,.14);border-radius:14px;padding:16px;backdrop-filter:blur(10px)}
+#a3vdetail .hint{font-size:12px;color:var(--a3sec);line-height:1.55}
+.a3dn{font-size:16px;font-weight:750;display:flex;align-items:center;gap:9px}
+.a3dn i{width:11px;height:11px;border-radius:50%;flex:none}
+.a3dg{font-family:var(--a3mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--a3kick);margin:5px 0 11px}
+.a3dtags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:11px}
+.a3dtag{font-family:var(--a3mono);font-size:8.5px;letter-spacing:.06em;color:#e8b366;border:1px solid rgba(217,160,74,.32);
+border-radius:6px;padding:3px 6px;text-transform:uppercase}
+.a3dl{font-family:var(--a3mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--a3muted);margin:10px 0 6px}
+.a3di{font-size:12px;color:var(--a3ink2);display:flex;align-items:center;gap:7px;cursor:pointer;padding:1px 0}
+.a3di i{width:7px;height:7px;border-radius:50%;flex:none}
+#aos3-toast{position:fixed;bottom:76px;left:50%;transform:translateX(-50%) translateY(90px);
+background:linear-gradient(150deg,rgba(232,179,102,.95),rgba(217,160,74,.95));color:#12100a;font-weight:600;
+border-radius:11px;padding:12px 20px;font-size:12.6px;z-index:999995;transition:transform .25s;max-width:90vw;
+font-family:'Instrument Sans',system-ui,sans-serif}
+#aos3-toast.show{transform:translateX(-50%) translateY(0)}
+#aos3-toast.err{background:rgba(229,88,79,.95);color:#fff}
+</style>
+<div id="aos3-hud">
+  <svg viewBox="0 0 100 100"><path d="M 86 32 H 32 V 50 H 68 V 68 H 14" fill="none" stroke="#f2eee4" stroke-width="11"/><path d="M 86 35 H 35 V 53 H 71 V 71 H 14" fill="none" stroke="#d9a04a" stroke-width="3"/></svg>
+  <span class="hb">Agency OS</span><span class="sep hidesm"></span><span class="hidesm">Sonoran Clinical Partners</span>
+  <span class="spacer"></span>
+  <span id="a3hudag" class="hidesm">— agents</span><span class="sep hidesm"></span>
+  <span class="lv"><i></i>Live</span><span class="sep"></span>
+  <span class="clk" id="a3clk">—</span>
+</div>
+<div id="aos3-dock">
+  <span class="mono">SCP</span>
+  <button id="a3b-cmd" onclick="aos3Open('cmd')"><span class="glyph">⌘</span>Command<span class="badge" id="a3bdg" style="display:none">0</span></button>
+  <button id="a3b-net" onclick="aos3Open('net')"><span class="glyph">◆</span>Network</button>
+  <button id="a3b-vault" onclick="aos3Open('vault')"><span class="glyph">◉</span>Vault</button>
+</div>
+<div id="aos3-ov"><div class="wrap">
+  <div class="tophead">
+    <div class="ttl" id="a3title">Command<small>Sonoran Clinical Partners · live</small></div>
+    <div style="display:flex;gap:9px;align-items:center">
+      <button class="a3btn" id="a3rf" onclick="aos3Refresh()">Refresh</button>
+      <button class="a3btn" onclick="aos3Close()">Esc ✕</button>
+    </div>
+  </div>
+  <div id="a3s-cmd"></div>
+  <div id="a3s-net" style="display:none"></div>
+  <div id="a3s-vault" style="display:none">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px">
+      <span class="a3kick" style="font-size:10px">Obsidian Vault</span>
+      <span class="a3pill" id="a3vcount" style="color:#7fb094;background:rgba(127,176,148,.1);border:1px solid rgba(127,176,148,.3)"></span>
+    </div>
+    <p style="font-size:13px;color:var(--a3sec);line-height:1.55;max-width:72ch;margin:0 0 16px">
+      The agency's memory topology — agents, system docs, deals, pipelines and knowledge sources, wired by every link between them.
+      Mirrors <span style="font-family:var(--a3mono);font-size:11.5px;color:var(--a3greenlt)">coyote-and-company/agency-os/brain</span> — sessions push, Obsidian pulls.</p>
+    <div id="a3vwrap">
+      <canvas id="a3vc"></canvas>
+      <div id="a3vlegend"></div>
+      <div id="a3vdetail"><div class="hint">Hover a node to trace its links. Drag to rearrange, scroll to zoom, drag empty space to pan. Click a connection to jump.</div></div>
+    </div>
+  </div>
+</div></div>
+<div id="aos3-toast"></div>
+<script>
+(function(){
+var A=(window.__AGENCY_DATA__&&window.__AGENCY_DATA__.aos2)||null;
+var cur='cmd';
+function E(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function ago(ms){if(!ms)return'';var h=Math.floor((Date.now()-ms)/36e5);if(h<1)return'just now';if(h<24)return h+'h ago';return Math.floor(h/24)+'d ago'}
+function gsr(){return (typeof google!=='undefined'&&google.script&&google.script.run)?google.script.run:null}
+function toast(m,e){var t=document.getElementById('aos3-toast');t.textContent=m;t.className=e?'err show':'show';
+clearTimeout(t._h);t._h=setTimeout(function(){t.className=''},3400)}
+function tick(){document.getElementById('a3clk').textContent=new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit'})}
+setInterval(tick,1000);tick();
+
+var COLORS={CEO:'#e8b366',INBOX:'#7cc4e8',COMPLIANCE:'#7fb094',BOOKS:'#ffc23d',BRIEF:'#ff9a62',WEEKLY:'#b8a2d9'};
+function statusOf(a){
+  var win=(a.key==='WEEKLY'||a.key==='COMPLIANCE'||a.key==='BOOKS')?8*864e5:26*36e5;
+  if(!a.lastMs)return{c:'#9aa6b8',bg:'rgba(255,255,255,.06)',t:'waiting'};
+  return (Date.now()-a.lastMs)<win?{c:'#41d98a',bg:'rgba(65,217,138,.14)',t:'active'}:{c:'#ffc23d',bg:'rgba(255,194,61,.12)',t:'stale'};
+}
+
+window.aos3Open=function(s){
+  cur=s;
+  document.getElementById('aos3-ov').classList.add('open');
+  ['cmd','net','vault'].forEach(function(k){
+    document.getElementById('a3s-'+k).style.display=k===s?'':'none';
+    document.getElementById('a3b-'+(k==='vault'?'vault':k)).classList.toggle('on',k===s);
+  });
+  document.getElementById('a3title').innerHTML=
+    s==='cmd'?'Command Center<small>approve · act · move it forward</small>':
+    s==='net'?'Agent Network<small>one chief of staff · the crew reports here</small>':
+    'Obsidian Vault<small>mirrors agency-os/brain · sessions push, obsidian pulls</small>';
+  if(s==='vault')vaultBoot();
+  document.body.style.overflow='hidden';
+};
+window.aos3Close=function(){
+  document.getElementById('aos3-ov').classList.remove('open');
+  ['cmd','net','vault'].forEach(function(k){document.getElementById('a3b-'+(k==='vault'?'vault':k)).classList.remove('on')});
+  document.body.style.overflow='';
+};
+document.addEventListener('keydown',function(e){if(e.key==='Escape')aos3Close()});
+window.aos3Refresh=function(){
+  var r=gsr(),b=document.getElementById('a3rf');
+  if(!r){toast('Server runtime not reachable',true);return}
+  b.disabled=true;b.textContent='Reading…';
+  r.withSuccessHandler(function(d){A=d;renderAll();b.disabled=false;b.textContent='Refresh';toast('Mailbox re-read')})
+   .withFailureHandler(function(e){b.disabled=false;b.textContent='Refresh';toast('Refresh failed: '+e.message,true)})
+   .aos2Refresh();
+};
+setInterval(function(){
+  if(document.getElementById('aos3-ov').classList.contains('open')&&gsr())
+    gsr().withSuccessHandler(function(d){A=d;renderAll()}).withFailureHandler(function(){}).aos2Refresh();
+},5*60*1000);
+
+/* ── COMMAND CENTER ── */
+function renderCmd(){
+  var el=document.getElementById('a3s-cmd');
+  if(!A){el.innerHTML='<div class="a3empty">No mission data — redeploy pending.</div>';return}
+  var open=A.actions.filter(function(a){return!a.done}).length;
+  var ranToday=A.agents.filter(function(a){var s=statusOf(a);return s.t==='active'}).length;
+  var nextEv=A.events.length?new Date(A.events[0].startMs).toLocaleString('en-US',{weekday:'short',hour:'numeric',minute:'2-digit'}):'—';
+  var h='<div class="a3stats">'+
+    '<div class="a3stat a3glass"><div class="l">System</div><div class="v" style="color:var(--a3green)">Live</div><div class="n">Reads Gmail on every load · agents on schedule.</div></div>'+
+    '<div class="a3stat a3glass" style="cursor:pointer" onclick="aos3Open(\'net\')"><div class="l">Agents</div><div class="v">'+ranToday+'/'+A.agents.length+'</div><div class="n">1 chief of staff + 3 specialists + 2 briefs.</div></div>'+
+    '<div class="a3stat a3glass"><div class="l">Approve desk</div><div class="v" style="color:'+(A.drafts.length?'var(--a3rose)':'var(--a3ink)')+'">'+A.drafts.length+'</div><div class="n">Drafts staged · nothing sends without you.</div></div>'+
+    '<div class="a3stat a3glass"><div class="l">Next actions</div><div class="v" style="color:'+(open?'var(--a3amber)':'var(--a3ink)')+'">'+open+'</div><div class="n">Next on calendar: '+E(nextEv)+'.</div></div></div>';
+  h+='<div class="a3grid"><div class="a3stack">';
+  h+='<div class="a3panel a3glass"><div class="a3h2">Approve &amp; send <span class="cnt">'+(A.drafts.length?'· '+A.drafts.length+' waiting':'')+'</span></div>';
+  h+=A.drafts.length?A.drafts.map(function(d,i){
+    return '<div class="a3dcard" id="a3dc'+i+'"><div class="a3dhead" onclick="aos3TogOpen('+i+')">'+
+      '<div><div class="a3dto">'+E(d.to)+'</div><div class="a3dsub">'+E(d.subject||'(no subject)')+'</div></div>'+
+      '<div class="a3dago">'+E(ago(d.ms))+'</div></div>'+
+      '<div class="a3dbody"><div class="a3dpre" id="a3pre'+i+'">'+E(d.body)+'</div>'+
+      '<div class="a3dedit"><input id="a3to'+i+'" value="'+E(d.to)+'"><input id="a3su'+i+'" value="'+E(d.subject)+'">'+
+      '<textarea id="a3bo'+i+'">'+E(d.body)+'</textarea></div>'+
+      '<div class="a3dbtns"><button class="a3btn" id="a3ed'+i+'" onclick="aos3TogEdit('+i+')">Edit</button>'+
+      '<button class="a3btn" id="a3sv'+i+'" style="display:none" onclick="aos3Save('+i+')">Save changes</button>'+
+      '<button class="a3btn primary" id="a3sn'+i+'" onclick="aos3Arm('+i+')">Approve &amp; send</button></div>'+
+      '<div class="a3note">Sends from taylor@sonoranclinicalpartners.com the moment you confirm. Nothing sends on its own.</div>'+
+      '</div></div>';}).join('')
+    :'<div class="a3empty">Nothing waiting on your approval. Drafts the Inbox Operator preps stack up here.</div>';
+  h+='</div>';
+  h+='<div class="a3panel a3glass"><div class="a3h2">Next actions <span class="cnt">'+(open?'· '+open+' open':'')+'</span></div>'+
+    '<div class="a3addrow"><input id="a3add" placeholder="Add an action… (Enter)" onkeydown="if(event.key===\'Enter\')aos3AddAct()">'+
+    '<button class="a3btn" onclick="aos3AddAct()">Add</button></div><div>'+
+    (A.actions.length?A.actions.map(function(a,i){
+      var tag=a.src==='YOU'?'you':(a.src==='MAILBOX'?'mb':'');
+      return '<div class="a3act'+(a.done?' done':'')+'"><div class="a3cb" onclick="aos3Tog('+i+')">'+(a.done?'✓':'')+'</div>'+
+        '<div class="a3atext">'+E(a.text)+'</div><span class="a3atag '+tag+'">'+E(a.src)+'</span>'+
+        '<span class="a3ax" onclick="aos3Drop('+i+')">×</span></div>';}).join('')
+      :'<div class="a3empty">Clear. The Orchestrator posts tomorrow’s queue at 4:15.</div>')+
+    '</div></div></div>';
+  h+='<div class="a3stack">';
+  h+='<div class="a3panel a3glass" style="background:radial-gradient(90% 130% at 8% 0%,rgba(65,217,138,.1),transparent 55%),rgba(255,255,255,.045);border-color:rgba(65,217,138,.3)">'+
+    '<div class="a3h2">The deal</div>'+
+    '<div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap">'+
+    '<div style="font-size:16px;font-weight:700">'+E(A.deal.name)+'</div>'+
+    '<div class="a3statuspill" style="color:#41d98a;background:rgba(65,217,138,.14)">'+E(A.deal.status)+'</div></div>'+
+    '<div class="a3dsub">'+E(A.deal.who)+'</div>'+
+    '<div style="font-size:13.5px;margin-top:9px;line-height:1.6">'+E(A.deal.terms)+'</div>'+
+    '<div class="a3note" style="border-top:1px solid rgba(255,255,255,.07);padding-top:8px;margin-top:9px">'+E(A.deal.note)+'</div></div>';
+  h+='<div class="a3panel a3glass"><div class="a3h2">This week</div>'+
+    (A.events.length?A.events.map(function(e){
+      return '<div class="a3ev"><span class="a3evd">'+E(new Date(e.startMs).toLocaleString('en-US',{weekday:'short',hour:'numeric',minute:'2-digit'}))+
+        '</span><span>'+E(e.title)+'</span></div>';}).join('')
+      :'<div class="a3empty">Nothing on the calendar in the next 8 days.</div>')+'</div>';
+  h+='<div class="a3panel a3glass"><div class="a3h2">Standard terms</div>'+
+    '<div class="a3pl"><span class="k">Introduction fee</span><span class="v am">$500 once, on signing</span></div>'+
+    '<div class="a3pl"><span class="k">Marketing services fee</span><span class="v am">3% of order volume</span></div>'+
+    '<div class="a3pl"><span class="k">Retainer / minimums</span><span class="v">none</span></div>'+
+    '<div class="a3pl"><span class="k">Booking</span><span class="v" style="font-family:var(--a3mono);font-size:11px">'+E(A.terms.booking)+'</span></div>'+
+    '<div class="a3note">'+E(A.terms.note)+'</div></div>';
+  h+='</div></div>';
+  el.innerHTML=h;
+}
+window.aos3TogOpen=function(i){document.getElementById('a3dc'+i).classList.toggle('open')};
+window.aos3TogEdit=function(i){var c=document.getElementById('a3dc'+i);c.classList.toggle('editing');
+  var on=c.classList.contains('editing');
+  document.getElementById('a3sv'+i).style.display=on?'':'none';
+  document.getElementById('a3ed'+i).textContent=on?'Cancel edit':'Edit';};
+window.aos3Save=function(i){var d=A.drafts[i],r=gsr();if(!r)return;
+  var to=document.getElementById('a3to'+i).value,su=document.getElementById('a3su'+i).value,bo=document.getElementById('a3bo'+i).value;
+  var b=document.getElementById('a3sv'+i);b.disabled=true;b.textContent='Saving…';
+  r.withSuccessHandler(function(res){b.disabled=false;b.textContent='Save changes';
+      if(res.ok){d.to=to;d.subject=su;d.body=bo;document.getElementById('a3pre'+i).textContent=bo;aos3TogEdit(i);toast('Draft updated in Gmail')}
+      else toast(res.err||'Save failed',true)})
+   .withFailureHandler(function(e){b.disabled=false;b.textContent='Save changes';toast('Save failed: '+e.message,true)})
+   .aos2SaveDraft(d.draftId,to,su,bo)};
+window.aos3Arm=function(i){var b=document.getElementById('a3sn'+i);
+  if(b.dataset.armed){aos3Send(i);return}
+  b.dataset.armed='1';b.innerHTML='Confirm send →';b.classList.add('danger');b.classList.remove('primary');
+  setTimeout(function(){if(b&&b.dataset.armed){delete b.dataset.armed;b.innerHTML='Approve &amp; send';b.classList.add('primary');b.classList.remove('danger')}},6000)};
+function aos3Send(i){var d=A.drafts[i],r=gsr();if(!r)return;
+  var b=document.getElementById('a3sn'+i);b.disabled=true;b.textContent='Sending…';
+  r.withSuccessHandler(function(res){
+      if(res.ok){toast('Sent to '+d.to);A.drafts.splice(i,1);renderCmd();badge()}
+      else{b.disabled=false;b.innerHTML='Approve &amp; send';toast(res.err||'Send failed',true)}})
+   .withFailureHandler(function(e){b.disabled=false;b.innerHTML='Approve &amp; send';toast('Send failed: '+e.message,true)})
+   .aos2SendDraft(d.draftId)}
+window.aos3Tog=function(i){var a=A.actions[i];a.done=!a.done;renderCmd();badge();
+  var r=gsr();if(r)r.withFailureHandler(function(){a.done=!a.done;renderCmd()}).aos2Toggle(a.id,a.done)};
+window.aos3Drop=function(i){var a=A.actions[i];A.actions.splice(i,1);renderCmd();badge();
+  var r=gsr();if(r)r.aos2Dismiss(a.id)};
+window.aos3AddAct=function(){var box=document.getElementById('a3add'),t=box.value.trim();if(!t)return;
+  box.value='';A.actions.unshift({id:'tmp'+Date.now(),text:t,src:'YOU',ms:Date.now(),done:false});renderCmd();badge();
+  var r=gsr();if(r)r.aos2Add(t)};
+
+/* ── AGENT NETWORK ── */
+function specCard(a,i){
+  var s=statusOf(a),col=COLORS[a.key]||'#7dd3fc';
+  var flow=(a.flow||[]).map(function(f,n){
+    return '<div class="a3step"><span class="a3stepn" style="color:'+col+';background:'+col+'16;border:1px solid '+col+'30">'+(n+1)+'</span>'+
+      '<span class="a3steptext">'+E(f)+'</span></div>'}).join('');
+  var chips=(a.tools||[]).map(function(t){
+    return '<span class="a3chip" style="color:'+col+';background:'+col+'14;border:1px solid '+col+'3A">'+E(t)+'</span>'}).join('');
+  return '<div class="a3spec a3glass" style="border-top:2px solid '+col+';animation-delay:'+(i*0.04)+'s">'+
+    '<div class="a3spechead"><span class="a3glyphtile" style="color:'+col+';background:'+col+'1E;border:1px solid '+col+'44">'+a.glyph+'</span>'+
+    '<div style="flex:1;min-width:0"><h3 class="a3specname">'+E(a.name)+'</h3><div class="a3specrole">'+E(a.role)+'</div></div>'+
+    '<span class="a3statuspill" style="color:'+s.c+';background:'+s.bg+'">'+s.t+'</span></div>'+
+    '<div class="a3specdesc">'+E(a.desc)+'</div>'+
+    (a.headline?'<div class="a3headline">'+E(a.headline)+'</div>':'')+
+    '<div class="a3chips">'+chips+'</div>'+
+    '<div class="a3flow">'+flow+'</div>'+
+    (a.output?'<div class="a3out" style="color:'+col+';background:'+col+'12;border:1px solid '+col+'2E">→ '+E(a.output)+'</div>':'')+
+    (a.tagline?'<div class="a3tagline">“'+E(a.tagline)+'”</div>':'')+
+    '<div class="a3modelrow"><span class="l">Model</span>'+
+    '<span class="a3lastrun">'+(a.lastMs?'last run '+ago(a.lastMs):'not yet run')+'</span>'+
+    '<span class="v">'+E(a.model||'claude')+'</span></div></div>';
+}
+function renderNet(){
+  var el=document.getElementById('a3s-net');
+  if(!A){el.innerHTML='<div class="a3empty">No mission data.</div>';return}
+  var ceo=null,specs=[],routines=[];
+  A.agents.forEach(function(a){if(a.command)ceo=a;else if(a.key==='BRIEF'||a.key==='WEEKLY')routines.push(a);else specs.push(a)});
+  var reports=A.agents.filter(function(a){return a.lastMs}).length;
+  var open=A.actions.filter(function(a){return!a.done}).length;
+  var h='<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px">'+
+    '<span class="a3kick" style="font-size:10px">Agent Network</span>'+
+    '<span class="a3pill" style="color:#e8b366;background:rgba(217,160,74,.1);border:1px solid rgba(217,160,74,.3)">'+
+    specs.length+' specialists · '+routines.length+' routines · 1 chief of staff</span></div>'+
+    '<p style="font-size:13px;color:var(--a3sec);line-height:1.55;max-width:74ch;margin:0 0 22px">One AI chief of staff coordinating the crew on a shared memory layer. You manage one approve desk — every agent reports here, reads the same mailbox, and feeds the same queue.</p>';
+  if(ceo){var cs=statusOf(ceo);
+    h+='<div class="a3ceo">'+
+      '<div class="a3ceoglyph">'+ceo.glyph+'</div>'+
+      '<div class="a3ceobody">'+
+      '<div class="a3ceostatus" style="background:'+cs.c+'">'+cs.t+'</div>'+
+      '<h2 class="a3ceoname">CEO / Orchestrator</h2>'+
+      '<div class="a3ceorole">Taylor’s AI chief of staff</div>'+
+      '<div class="a3ceodesc">'+E(ceo.desc)+'</div>'+
+      (ceo.headline?'<div class="a3headline" style="margin-top:9px">'+E(ceo.headline)+'</div>':'')+
+      (ceo.tagline?'<div class="a3ceotag">“'+E(ceo.tagline)+'”</div>':'')+
+      '</div>'+
+      '<div class="a3ceostats">'+
+      '<div><div class="l">Specialists</div><div class="v">'+specs.length+'</div></div>'+
+      '<div><div class="l">Reported</div><div class="v">'+reports+'/'+A.agents.length+'</div></div>'+
+      '<div><div class="l">Open actions</div><div class="v">'+open+'</div></div>'+
+      '<div><div class="l">Model</div><div class="v mono">'+E(ceo.model||'claude')+'</div></div>'+
+      '</div></div>';}
+  h+='<div class="a3netgrid">'+specs.concat(routines).map(specCard).join('')+'</div>';
+  h+='<div class="a3mem"><div class="a3memhead"><span class="a3memdot"></span>'+
+    '<h3 class="a3memtitle">Shared Memory Layer</h3>'+
+    '<span class="a3membadge">Gmail + Script Properties</span></div>'+
+    '<div class="a3memdesc">Every agent reads from this and writes back to it. Nothing gets re-explained. Everything compounds.</div>'+
+    '<div class="a3memchips">'+['Gmail — the source of truth','AOS report mail','Approve-desk drafts','Action state — script properties','Drive sheets — pipeline data','Persistent Claude memory','agency-os/brain — the vault'].map(function(m){return '<span class="a3memchip">'+E(m)+'</span>'}).join('')+'</div></div>';
+  el.innerHTML=h;
+}
+
+/* ── OBSIDIAN VAULT — FarmHand force graph ── */
+var GROUPS={agents:{color:'#7cc4e8',label:'Agents'},system:{color:'#e8b366',label:'System'},deals:{color:'#e87c9a',label:'Deals & calls'},
+pipelines:{color:'#4ec9b0',label:'Pipelines'},knowledge:{color:'#7fb094',label:'Knowledge'},comms:{color:'#ff9a62',label:'Comms'}};
+var TAGS={agents:['AGENT','ORCHESTRATES'],system:['SYSTEM-DOC','OWNS_CONTEXT'],deals:['DEAL','IN-PLAY'],
+pipelines:['PIPELINE'],knowledge:['KB-SOURCE','GROUNDS'],comms:['COMMS','CHANNEL']};
+var NODES=[['SCP Brain','system'],['Agency OS','system'],['Morning Brief','system'],['Weekly Brief','system'],['Approve Desk','system'],['Next Actions','system'],
+['Orchestrator','agents'],['Inbox Operator','agents'],['Compliance Watch','agents'],['Books','agents'],
+['ProRx — 3% agreed','deals'],['Globyz call','deals'],['Assure call','deals'],['Frier Levitt','deals'],['Staska','deals'],
+['Supplier Board','pipelines'],['Buyer Pipeline 25k','pipelines'],['TRT Niche','pipelines'],
+['Legal Deep Dive','knowledge'],['TRT Niche Brief','knowledge'],['Counsel Questions','knowledge'],['Terms & Bright Lines','knowledge'],['State Risk Map','knowledge'],
+['Gmail','comms'],['Calendar','comms'],['Cal.com booking','comms']];
+var LINKS=[['SCP Brain','Agency OS'],['SCP Brain','Orchestrator'],['SCP Brain','Supplier Board'],['SCP Brain','Buyer Pipeline 25k'],['SCP Brain','TRT Niche'],['SCP Brain','Legal Deep Dive'],['SCP Brain','Terms & Bright Lines'],['SCP Brain','Gmail'],
+['Orchestrator','Agency OS'],['Orchestrator','Inbox Operator'],['Orchestrator','Compliance Watch'],['Orchestrator','Books'],
+['Orchestrator','Next Actions'],['Orchestrator','Morning Brief'],['Orchestrator','Weekly Brief'],['Orchestrator','Supplier Board'],
+['Inbox Operator','Gmail'],['Inbox Operator','Approve Desk'],['Inbox Operator','Calendar'],['Inbox Operator','Supplier Board'],
+['Compliance Watch','State Risk Map'],['Compliance Watch','Legal Deep Dive'],['Compliance Watch','TRT Niche Brief'],
+['Books','Gmail'],['Books','ProRx — 3% agreed'],
+['Agency OS','Approve Desk'],['Agency OS','Next Actions'],['Agency OS','Gmail'],['Agency OS','Supplier Board'],['Agency OS','Buyer Pipeline 25k'],
+['Morning Brief','Gmail'],['Weekly Brief','Gmail'],
+['ProRx — 3% agreed','Supplier Board'],['ProRx — 3% agreed','Terms & Bright Lines'],
+['Globyz call','Supplier Board'],['Globyz call','Calendar'],['Assure call','Supplier Board'],['Assure call','Calendar'],
+['Staska','Supplier Board'],['Frier Levitt','Counsel Questions'],['Frier Levitt','Terms & Bright Lines'],['Frier Levitt','Calendar'],
+['Supplier Board','TRT Niche'],['Buyer Pipeline 25k','TRT Niche'],['TRT Niche','TRT Niche Brief'],
+['Counsel Questions','Legal Deep Dive'],['Terms & Bright Lines','Legal Deep Dive'],['State Risk Map','Legal Deep Dive'],
+['Cal.com booking','Calendar'],['Cal.com booking','Supplier Board']];
+var V={boot:false,off:{}};
+function vaultBoot(){
+  if(V.boot)return;V.boot=true;
+  var idx={},nodes=NODES.map(function(n,i){idx[n[0]]=i;
+    var a=(i/NODES.length)*Math.PI*2;
+    return{id:n[0],g:n[1],x:Math.cos(a)*(160+(i%3)*40),y:Math.sin(a)*(160+(i%3)*40),vx:0,vy:0,fx:null,fy:null,deg:0,r:6}});
+  var adj={};nodes.forEach(function(n){adj[n.id]={out:[],inn:[]}});
+  var seen={},links=[];
+  LINKS.forEach(function(l){var a=l[0],b=l[1];if(idx[a]==null||idx[b]==null)return;
+    adj[a].out.push(b);adj[b].inn.push(a);
+    var k=a<b?a+'|'+b:b+'|'+a;if(!seen[k]){seen[k]=true;links.push({s:idx[a],t:idx[b]})}});
+  var nb={};
+  nodes.forEach(function(n,i){var s={};
+    adj[n.id].out.forEach(function(x){s[idx[x]]=true});
+    adj[n.id].inn.forEach(function(x){s[idx[x]]=true});
+    nb[i]=s;n.deg=Object.keys(s).length;n.r=5+Math.sqrt(n.deg)*3.1});
+  var M={nodes:nodes,idx:idx,links:links,adj:adj,nb:nb};
+  document.getElementById('a3vcount').textContent=NODES.length+' nodes · '+links.length+' edges';
+  var lg=document.getElementById('a3vlegend');
+  lg.innerHTML=Object.keys(GROUPS).map(function(g){
+    return '<div class="a3lg" data-g="'+g+'"><i style="background:'+GROUPS[g].color+';box-shadow:0 0 7px '+GROUPS[g].color+'"></i>'+GROUPS[g].label+'</div>'}).join('');
+  lg.querySelectorAll('.a3lg').forEach(function(el){
+    el.onclick=function(){var g=el.dataset.g;V.off[g]=!V.off[g];el.classList.toggle('offg',!!V.off[g])}});
+  var wrap=document.getElementById('a3vwrap'),canvas=document.getElementById('a3vc'),ctx=canvas.getContext('2d');
+  var DPR=Math.min(2,window.devicePixelRatio||1),W=0,H=0;
+  var view={x:0,y:0,k:1},hoverI=-1,alpha=0.14,dragI=-1,pan=false,last={x:0,y:0};
+  function resize(){var r=wrap.getBoundingClientRect();W=r.width;H=r.height;
+    canvas.width=W*DPR;canvas.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}
+  resize();window.addEventListener('resize',resize);
+  function step(al){var N=M.nodes;
+    for(var i=0;i<N.length;i++){var a=N[i];
+      for(var j=i+1;j<N.length;j++){var b=N[j];
+        var dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy||0.01,d=Math.sqrt(d2),f=3800/d2,ux=dx/d,uy=dy/d;
+        a.vx+=ux*f*al;a.vy+=uy*f*al;b.vx-=ux*f*al;b.vy-=uy*f*al}}
+    M.links.forEach(function(l){var a=N[l.s],b=N[l.t];
+      var dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||0.01,f=(d-132)*0.036*al,ux=dx/d,uy=dy/d;
+      a.vx+=ux*f;a.vy+=uy*f;b.vx-=ux*f;b.vy-=uy*f});
+    N.forEach(function(n){
+      n.vx+=-n.x*0.006*al;n.vy+=-n.y*0.006*al;
+      if(n.fx!=null){n.x=n.fx;n.y=n.fy;n.vx=0;n.vy=0;return}
+      n.vx*=0.86;n.vy*=0.86;n.x+=n.vx;n.y+=n.vy})}
+  for(var w=0;w<420;w++)step(1);
+  function vis(n){return !V.off[n.g]}
+  function draw(){
+    ctx.clearRect(0,0,W,H);ctx.save();ctx.translate(W/2+view.x,H/2+view.y);ctx.scale(view.k,view.k);
+    var focus=hoverI,nbSet=focus>=0?M.nb[focus]:null;
+    M.links.forEach(function(l){var a=M.nodes[l.s],b=M.nodes[l.t];if(!vis(a)||!vis(b))return;
+      var on=focus<0||l.s===focus||l.t===focus;
+      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+      ctx.strokeStyle=on?'rgba(217,160,74,0.45)':'rgba(190,180,160,0.06)';ctx.lineWidth=on?1.3:0.6;ctx.stroke()});
+    M.nodes.forEach(function(n,i){if(!vis(n))return;var col=GROUPS[n.g].color;
+      var dim=focus>=0&&i!==focus&&!(nbSet&&nbSet[i]);
+      ctx.globalAlpha=dim?0.2:1;ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,6.2832);
+      ctx.fillStyle=col;ctx.shadowColor=col;ctx.shadowBlur=i===focus?22:dim?0:9;ctx.fill();ctx.shadowBlur=0;
+      if(i===focus){ctx.lineWidth=2;ctx.strokeStyle='#fff';ctx.stroke()}
+      var lab=!dim&&(n.deg>=6||i===focus||(nbSet&&nbSet[i])||view.k>1.2);
+      if(lab){ctx.globalAlpha=1;ctx.font=(i===focus?'600 ':'')+'10.5px system-ui,sans-serif';ctx.textAlign='center';
+        ctx.fillStyle=i===focus?'#f2eee4':'#c9c4b4';ctx.fillText(n.id,n.x,n.y+n.r+11)}});
+    ctx.globalAlpha=1;ctx.restore()}
+  (function loop(){if(alpha>0.008){step(alpha);alpha*=0.992}draw();requestAnimationFrame(loop)})();
+  function toW(px,py){return{x:(px-W/2-view.x)/view.k,y:(py-H/2-view.y)/view.k}}
+  function pick(px,py){var w=toW(px,py),best=-1,bd=1e9;
+    for(var i=0;i<M.nodes.length;i++){var n=M.nodes[i];if(V.off[n.g])continue;
+      var dx=n.x-w.x,dy=n.y-w.y,d=Math.sqrt(dx*dx+dy*dy);if(d<n.r+6&&d<bd){bd=d;best=i}}return best}
+  function detHtml(id){var n=M.nodes[M.idx[id]];
+    function list(label,items){return '<div class="a3dl">'+label+'</div>'+(items.length?items.map(function(x){
+      var g=GROUPS[(NODES.filter(function(q){return q[0]===x})[0]||[null,'system'])[1]];
+      return '<div class="a3di" data-id="'+E(x)+'"><i style="background:'+g.color+'"></i>'+E(x)+'</div>'}).join('')
+      :'<div style="font-size:11px;color:var(--a3muted)">none</div>')}
+    return '<div class="a3dn"><i style="background:'+GROUPS[n.g].color+';box-shadow:0 0 9px '+GROUPS[n.g].color+'"></i>'+E(n.id)+'</div>'+
+      '<div class="a3dg">'+GROUPS[n.g].label+' · '+n.deg+' connections</div>'+
+      '<div class="a3dtags">'+TAGS[n.g].map(function(t){return '<span class="a3dtag">'+t+'</span>'}).join('')+'</div>'+
+      list('Links to ('+M.adj[n.id].out.length+')',M.adj[n.id].out.slice().sort())+
+      list('Linked from ('+M.adj[n.id].inn.length+')',M.adj[n.id].inn.slice().sort())}
+  var det=document.getElementById('a3vdetail');
+  function showDetail(i){det.innerHTML=detHtml(M.nodes[i].id);
+    det.querySelectorAll('.a3di').forEach(function(el){el.onclick=function(){var id=el.dataset.id;
+      hoverI=M.idx[id];showDetail(M.idx[id])}})}
+  function pos(e){var r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+  function down(p){var i=pick(p.x,p.y);
+    if(i>=0){dragI=i;M.nodes[i].fx=M.nodes[i].x;M.nodes[i].fy=M.nodes[i].y;alpha=Math.max(alpha,0.12);hoverI=i;showDetail(i)}
+    else{pan=true;last.x=p.x;last.y=p.y}}
+  function move(p){
+    if(dragI>=0){var w=toW(p.x,p.y);M.nodes[dragI].fx=w.x;M.nodes[dragI].fy=w.y;alpha=Math.max(alpha,0.1)}
+    else if(pan){view.x+=p.x-last.x;view.y+=p.y-last.y;last.x=p.x;last.y=p.y}
+    else{var i=pick(p.x,p.y);if(i!==hoverI){hoverI=i;if(i>=0)showDetail(i)}canvas.style.cursor=i>=0?'pointer':'grab'}}
+  function up(){if(dragI>=0){M.nodes[dragI].fx=null;M.nodes[dragI].fy=null}dragI=-1;pan=false}
+  canvas.addEventListener('mousedown',function(e){down(pos(e))});
+  canvas.addEventListener('mousemove',function(e){move(pos(e))});
+  window.addEventListener('mouseup',up);
+  canvas.addEventListener('touchstart',function(e){down(pos(e.touches[0]));e.preventDefault()},{passive:false});
+  canvas.addEventListener('touchmove',function(e){move(pos(e.touches[0]));e.preventDefault()},{passive:false});
+  canvas.addEventListener('touchend',up);
+  canvas.addEventListener('wheel',function(e){e.preventDefault();var f=e.deltaY<0?1.12:0.89;var p=pos(e);
+    var wx=(p.x-W/2-view.x)/view.k,wy=(p.y-H/2-view.y)/view.k;
+    view.k=Math.max(0.4,Math.min(3,view.k*f));view.x=p.x-W/2-wx*view.k;view.y=p.y-H/2-wy*view.k},{passive:false});
+}
+
+/* ── boot ── */
+function badge(){
+  var open=A?A.actions.filter(function(a){return!a.done}).length:0;
+  var n=A?A.drafts.length+open:0;
+  var b=document.getElementById('a3bdg');
+  b.style.display=n?'':'none';b.textContent=n;
+  if(A){var on=A.agents.filter(function(a){return statusOf(a).t==='active'}).length;
+    document.getElementById('a3hudag').textContent=on+'/'+A.agents.length+' agents active'}}
+function renderAll(){renderCmd();renderNet();badge()}
+renderAll();
+})();
+</script>
