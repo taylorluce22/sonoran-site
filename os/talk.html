@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voice Desk — Agency OS</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#070e10">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SCP Voice Desk">
+<style>
+  :root{--bg:#070e10;--paper:#f2eee4;--dim:rgba(242,238,228,.6);--dim2:rgba(242,238,228,.42);
+        --amber:#d9a04a;--pine:#204a38;--hair:rgba(242,238,228,.12)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:radial-gradient(1100px 620px at 50% -10%, rgba(32,74,56,.4), transparent 62%),#070e10;
+       color:var(--paper);font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+       -webkit-font-smoothing:antialiased;display:flex;flex-direction:column;align-items:center;
+       justify-content:center;min-height:100%;padding:32px 20px;text-align:center;gap:6px}
+  svg.logo{width:52px;height:52px;margin-bottom:6px}
+  .kick{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--amber)}
+  h1{font-size:22px;font-weight:700;letter-spacing:-.01em;margin-top:4px}
+  .sub{font-size:12.5px;color:var(--dim);max-width:440px;line-height:1.6;margin-top:8px}
+  .widget-wrap{margin-top:26px;min-height:120px;display:flex;align-items:center;justify-content:center}
+  .rules{margin-top:30px;padding-top:16px;border-top:1px solid var(--hair);max-width:460px;
+         font-size:11px;line-height:1.7;color:var(--dim2)}
+  .rules b{color:var(--dim)}
+  a{color:var(--amber);text-decoration:none}
+</style>
+</head>
+<body>
+  <svg class="logo" viewBox="0 0 100 100">
+    <rect x="0" y="0" width="100" height="100" rx="22" fill="#204a38"/>
+    <path d="M 78 36 H 36 V 50 H 64 V 64 H 22" fill="none" stroke="#f2eee4" stroke-width="9"/>
+    <path d="M 78 38.5 H 38.5 V 52.5 H 66.5 V 66.5 H 22" fill="none" stroke="#d9a04a" stroke-width="2.6"/>
+  </svg>
+  <div class="kick">Sonoran Clinical Partners</div>
+  <h1>Voice Desk</h1>
+  <div class="sub">Talk it through out loud &mdash; call prep, pipeline, decisions. It knows the business.
+    Anything that needs doing gets queued for your Cowork Claude to run &mdash; nothing sends without your yes.</div>
+
+  <div class="widget-wrap">
+    <elevenlabs-convai agent-id="agent_4501kzprvxj3f9zr8es71qpze4sc"></elevenlabs-convai>
+  </div>
+
+  <div class="rules">
+    Tap <b>Start a call</b> and allow the microphone. First time on a new device, your browser will ask once.<br>
+    Best on the <b>Sonoran</b> tab &mdash; works on phone and desktop.
+  </div>
+
+  <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+</body>
+</html>
