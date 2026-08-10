@@ -46,9 +46,20 @@
 <script>
   if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').catch(function(){}); }
   var EXEC = 'https://script.google.com/a/macros/sonoranclinicalpartners.com/s/AKfycbwrN5Oc3PU-DtFIO96Kz0X7V_j3yAwOdvPSbZu2HaQJiWhpuIKwyvGeEQWioIz0MIXWPg/exec';
-  setTimeout(function(){ location.replace(EXEC); }, 350);
-  // If something blocks the redirect, surface the manual link.
-  setTimeout(function(){ document.getElementById('manual').style.display='inline'; }, 2600);
+  var setup = new URLSearchParams(location.search).has('setup');
+  if (setup) {
+    // Install mode: stay on this page so Chrome installs it with the Agency OS icon.
+    document.querySelector('.go').innerHTML =
+      'Install mode — no redirect.<br><br>' +
+      'In Chrome: <b>⋮ menu → Cast, save and share → Install page as app…</b><br>' +
+      'Name it Agency OS, click Install, then launch it from your Dock.<br><br>' +
+      '<a href="/os/"><b>Or open the live app →</b></a>';
+    document.querySelector('.bar').style.display = 'none';
+  } else {
+    setTimeout(function(){ location.replace(EXEC); }, 350);
+    // If something blocks the redirect, surface the manual link.
+    setTimeout(function(){ var m=document.getElementById('manual'); if(m) m.style.display='inline'; }, 2600);
+  }
 </script>
 </body>
 </html>
