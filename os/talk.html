@@ -3,51 +3,79 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Voice Desk — Agency OS</title>
+<title>Agency OS — Sonoran Clinical Partners</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#070e10">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="SCP Voice Desk">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Agency OS">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="Agency OS">
+<link rel="icon" type="image/png" sizes="512x512" href="/os-icon.png">
+<link rel="apple-touch-icon" href="/os-icon.png">
 <style>
-  :root{--bg:#070e10;--paper:#f2eee4;--dim:rgba(242,238,228,.6);--dim2:rgba(242,238,228,.42);
-        --amber:#d9a04a;--pine:#204a38;--hair:rgba(242,238,228,.12)}
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{background:radial-gradient(1100px 620px at 50% -10%, rgba(32,74,56,.4), transparent 62%),#070e10;
-       color:var(--paper);font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
-       -webkit-font-smoothing:antialiased;display:flex;flex-direction:column;align-items:center;
-       justify-content:center;min-height:100%;padding:32px 20px;text-align:center;gap:6px}
-  svg.logo{width:52px;height:52px;margin-bottom:6px}
-  .kick{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--amber)}
-  h1{font-size:22px;font-weight:700;letter-spacing:-.01em;margin-top:4px}
-  .sub{font-size:12.5px;color:var(--dim);max-width:440px;line-height:1.6;margin-top:8px}
-  .widget-wrap{margin-top:26px;min-height:120px;display:flex;align-items:center;justify-content:center}
-  .rules{margin-top:30px;padding-top:16px;border-top:1px solid var(--hair);max-width:460px;
-         font-size:11px;line-height:1.7;color:var(--dim2)}
-  .rules b{color:var(--dim)}
-  a{color:var(--amber);text-decoration:none}
+  :root { color-scheme: dark; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: #070e10; overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Fallback shown behind the OS if it can't load (wrong Google account) */
+  #fallback {
+    position: fixed; inset: 0; z-index: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 18px; padding: 32px; text-align: center;
+    font: 400 14px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color: #6f7d78; letter-spacing: 0.04em;
+  }
+  #fallback strong {
+    display: block; color: #faf9f6; font-size: 15px;
+    letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;
+  }
+  #fallback a {
+    color: #d9a04a; text-decoration: none;
+    border: 1px solid rgba(217,160,74,0.4);
+    padding: 10px 18px; border-radius: 4px;
+    letter-spacing: 0.08em; text-transform: uppercase; font-size: 12px;
+  }
+  #fallback a:hover { background: rgba(217,160,74,0.1); }
+  /* The full Agency OS, edge to edge */
+  #app {
+    position: fixed; inset: 0; z-index: 1;
+    width: 100%; height: 100%;
+    border: 0; background: #070e10;
+  }
+  /* Mask over the OS's own bottom-right TALK button so there's ONE voice control */
+  #bezel {
+    position: fixed; right: 0; bottom: 0; z-index: 2;
+    width: 208px; height: 104px;
+    background: #070e10;
+    pointer-events: none;
+  }
+  /* The ElevenLabs voice agent floats above everything (mic works on this real domain) */
+  elevenlabs-convai { position: relative; z-index: 2147483000; }
 </style>
 </head>
 <body>
-  <svg class="logo" viewBox="0 0 100 100">
-    <rect x="0" y="0" width="100" height="100" rx="22" fill="#204a38"/>
-    <path d="M 78 36 H 36 V 50 H 64 V 64 H 22" fill="none" stroke="#f2eee4" stroke-width="9"/>
-    <path d="M 78 38.5 H 38.5 V 52.5 H 66.5 V 66.5 H 22" fill="none" stroke="#d9a04a" stroke-width="2.6"/>
-  </svg>
-  <div class="kick">Sonoran Clinical Partners</div>
-  <h1>Voice Desk</h1>
-  <div class="sub">Talk it through out loud &mdash; call prep, pipeline, decisions. It knows the business.
-    Anything that needs doing gets queued for your Cowork Claude to run &mdash; nothing sends without your yes.</div>
-
-  <div class="widget-wrap">
-    <elevenlabs-convai agent-id="agent_4501kzprvxj3f9zr8es71qpze4sc"></elevenlabs-convai>
+  <div id="fallback">
+    <strong>Agency OS</strong>
+    <div>
+      If your mission control doesn't load, you're signed into the wrong Google account.<br>
+      Sign in as taylor@sonoranclinicalpartners.com, then reload. The voice desk still works either way.
+    </div>
+    <a href="https://script.google.com/a/macros/sonoranclinicalpartners.com/s/AKfycbwrN5Oc3PU-DtFIO96Kz0X7V_j3yAwOdvPSbZu2HaQJiWhpuIKwyvGeEQWioIz0MIXWPg/exec" target="_blank" rel="noopener">Open OS directly &#8599;</a>
   </div>
 
-  <div class="rules">
-    Tap <b>Start a call</b> and allow the microphone. First time on a new device, your browser will ask once.<br>
-    Best on the <b>Sonoran</b> tab &mdash; works on phone and desktop.
-  </div>
+  <iframe id="app"
+    title="Agency OS"
+    src="https://script.google.com/a/macros/sonoranclinicalpartners.com/s/AKfycbwrN5Oc3PU-DtFIO96Kz0X7V_j3yAwOdvPSbZu2HaQJiWhpuIKwyvGeEQWioIz0MIXWPg/exec"
+    allow="clipboard-write"></iframe>
 
+  <div id="bezel"></div>
+
+  <!-- Voice agent — lives on the real domain so the microphone works -->
+  <elevenlabs-convai agent-id="agent_4501kzprvxj3f9zr8es71qpze4sc"></elevenlabs-convai>
   <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
 </body>
 </html>
