@@ -54,7 +54,42 @@
     pointer-events: none;
   }
   /* The ElevenLabs voice agent manages its own fixed bottom-right float (mic works on this real domain) */
+  /* One-time "turn on alerts" pill (hidden once you've allowed notifications) */
+  #alerts-btn {
+    display: none; position: fixed; left: 20px; bottom: 20px; z-index: 2147482000;
+    align-items: center; gap: 8px;
+    background: #204a38; color: #f2eee4; border: 1px solid rgba(217,160,74,.55);
+    border-radius: 999px; padding: 10px 15px; cursor: pointer;
+    font: 600 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .04em;
+    box-shadow: 0 6px 20px rgba(0,0,0,.4);
+  }
+  #alerts-btn:hover { border-color: #d9a04a; }
 </style>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function (OneSignal) {
+    await OneSignal.init({
+      appId: "bd99046b-e86e-4ac7-b3c9-faf38bd2ae20",
+      serviceWorkerParam: { scope: "/os/" },
+      serviceWorkerPath: "os/sw.js"
+    });
+    window.__OneSignal = OneSignal;
+    function syncAlertsBtn() {
+      var granted = false;
+      try { granted = OneSignal.Notifications.permission === true; } catch (e) {}
+      var b = document.getElementById('alerts-btn');
+      if (b) b.style.display = granted ? 'none' : 'flex';
+    }
+    syncAlertsBtn();
+    try { OneSignal.Notifications.addEventListener('permissionChange', syncAlertsBtn); } catch (e) {}
+  });
+  function scpEnableAlerts() {
+    var O = window.__OneSignal;
+    if (!O) return;
+    try { O.Notifications.requestPermission(); } catch (e) {}
+  }
+</script>
 </head>
 <body>
   <div id="fallback">
@@ -72,6 +107,8 @@
     allow="clipboard-write"></iframe>
 
   <div id="bezel"></div>
+
+  <button id="alerts-btn" type="button" onclick="scpEnableAlerts()">&#128276;&nbsp;Turn on appointment alerts</button>
 
   <!-- Voice agent — lives on the real domain so the microphone works -->
   <elevenlabs-convai agent-id="agent_4501kzprvxj3f9zr8es71qpze4sc"></elevenlabs-convai>
